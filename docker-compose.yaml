@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  backend:
+    container_name: api
+    build: './backend'
+    expose:
+      - "3333"
+    env_file: 
+      - ./backend/config/dev.env
+    depends_on:
+      - mongo
+    networks:
+      - app-connect
+    ports:
+      - "3333:3333"
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - app-connect
+
+  web:
+    container_name: web
+    build: './frontend'
+    stdin_open: true
+    ports:
+        - '3000:3000'
+    depends_on:
+        - mongo
+        - backend
+    environment:
+        - REACT_APP_BASE_URL=http://localhost:3333
+
+networks:
+  app-connect:
+      driver: bridge

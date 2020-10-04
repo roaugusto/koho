@@ -1,0 +1,143 @@
+basePath: /
+definitions:
+  records.RecordAccount:
+    properties:
+      customer_id:
+        example: "4567"
+        type: string
+      id:
+        example: "1234"
+        type: string
+      load_amount:
+        example: $3456.78
+        type: string
+      time:
+        example: "2000-01-01T00:00:00Z"
+        type: string
+    type: object
+  records.RecordAccountList:
+    items:
+      $ref: '#/definitions/records.RecordAccount'
+    type: array
+  records.RecordProcessed:
+    properties:
+      accepted:
+        type: string
+      cod_error:
+        type: string
+      customer_id:
+        type: string
+      id:
+        type: string
+      load_amount:
+        type: string
+      message:
+        type: string
+      time:
+        type: string
+    type: object
+  records.RecordProcessedList:
+    items:
+      $ref: '#/definitions/records.RecordProcessed'
+    type: array
+host: localhost:3333
+info:
+  contact:
+    email: ro.augusto@gmail.com
+    name: Rodrigo Santos
+  description: API REST to load funds based on a file with load amounts.
+  license: {}
+  title: Swagger Koho Load Funds
+  version: "1.0"
+paths:
+  /api/funds:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Process Funds of customers from a specific file
+      parameters:
+      - description: input.txt
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Process Funds from a specific file
+      tags:
+      - Records
+  /api/funds-body-req:
+    post:
+      consumes:
+      - application/json
+      description: Process Funds of customers from body json
+      parameters:
+      - description: List of Load Funds of customers
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/records.RecordAccountList'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Process Funds from body json
+      tags:
+      - Records
+  /api/funds-write-result-db:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Process Funds of customers from a specific file and write result on MongoDB
+      parameters:
+      - description: input.txt
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Process Funds from a specific file and write result on MongoDB
+      tags:
+      - Records
+  /api/funds/download:
+    get:
+      description: Download the last result of loading the file of Load Funds of customers
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Download last result of load funds file
+      tags:
+      - Records
+  /api/funds/result:
+    get:
+      description: List the last result of loading the file of Load Funds of customers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/records.RecordProcessedList'
+      summary: List the last result of load funds file
+      tags:
+      - Records
+swagger: "2.0"

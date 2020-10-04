@@ -1,0 +1,5 @@
+{"id":"1234","customer_id":"273","load_amount":"$9000.00","time":"2020-09-27T07:09:34Z"}
+{"id":"7528","customer_id":"273","load_amount":"$9000.00","time":"2020-09-28T07:09:34Z"}
+{"id":"27947","customer_id":"273","load_amount":"$9000.00","time":"2020-09-29T08:10:56Z"}
+{"id":"20790","customer_id":"273","load_amount":"$9000.00","time":"2020-09-30T09:12:18Z"}
+{"id":"12408","customer_id":"273","load_amount":"$9000.00","time":"2020-10-01T10:13:40Z"}
