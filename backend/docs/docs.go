@@ -156,6 +156,32 @@ var doc = `{
                     "Records"
                 ],
                 "summary": "Lists the last result of load funds file that was written on MongoDB",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "customer_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Accepted",
+                        "name": "accepted",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Error Code: 10",
+                        "name": "cod_error",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -199,25 +225,32 @@ var doc = `{
             "type": "object",
             "properties": {
                 "accepted": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "true"
                 },
                 "cod_error": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "10"
                 },
                 "customer_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1234"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1234"
                 },
                 "load_amount": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "$3456.78"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Message error!"
                 },
                 "time": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2000-01-01T00:00:00Z"
                 }
             }
         },

@@ -133,6 +133,10 @@ func (h *RecordHandler) GetFile(c echo.Context) error {
 // @Summary Lists the last result of load funds file that was written on MongoDB
 // @Description Lists the last result of load funds file that was written on MongoDB
 // @Produce  json
+// @Param   id     				query  string  false   "Transaction ID"
+// @Param   customer_id   query  string  false   "Customer ID"
+// @Param   accepted      query  string  false   "Accepted"
+// @Param   cod_error     query  string  false   "Error Code: 10"
 // @Success 200 {object} records.RecordProcessedList
 // @Router /api/funds/result [get]
 func (h *RecordHandler) GetRecordsFromDB(c echo.Context) error {
