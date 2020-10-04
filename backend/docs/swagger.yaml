@@ -54,7 +54,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: Process Funds of customers from a specific file
+      description: Processes Funds of customers from a specific file
       parameters:
       - description: input.txt
         in: formData
@@ -68,14 +68,14 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Process Funds from a specific file
+      summary: Processes Funds from a specific file
       tags:
       - Records
   /api/funds-body-req:
     post:
       consumes:
       - application/json
-      description: Process Funds of customers from body json
+      description: Processes Funds of customers from body json
       parameters:
       - description: List of Load Funds of customers
         in: body
@@ -90,14 +90,14 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Process Funds from body json
+      summary: Processes Funds from body json
       tags:
       - Records
   /api/funds-write-result-db:
     post:
       consumes:
       - multipart/form-data
-      description: Process Funds of customers from a specific file and write result on MongoDB
+      description: Processes Funds of customers from a specific file and write result on MongoDB
       parameters:
       - description: input.txt
         in: formData
@@ -111,12 +111,12 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Process Funds from a specific file and write result on MongoDB
+      summary: Processes Funds from a specific file and write result on MongoDB
       tags:
       - Records
   /api/funds/download:
     get:
-      description: Download the last result of loading the file of Load Funds of customers
+      description: Downloads the last result of loading the file of Load Funds of customers
       produces:
       - text/plain
       responses:
@@ -124,12 +124,12 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Download last result of load funds file
+      summary: Downloads last result of load funds file
       tags:
       - Records
   /api/funds/result:
     get:
-      description: List the last result of loading the file of Load Funds of customers
+      description: Lists the last result of load funds file that was written on MongoDB
       produces:
       - application/json
       responses:
@@ -137,7 +137,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/records.RecordProcessedList'
-      summary: List the last result of load funds file
+      summary: Lists the last result of load funds file that was written on MongoDB
       tags:
       - Records
 swagger: "2.0"

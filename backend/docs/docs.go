@@ -30,7 +30,7 @@ var doc = `{
     "paths": {
         "/api/funds": {
             "post": {
-                "description": "Process Funds of customers from a specific file",
+                "description": "Processes Funds of customers from a specific file",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -40,7 +40,7 @@ var doc = `{
                 "tags": [
                     "Records"
                 ],
-                "summary": "Process Funds from a specific file",
+                "summary": "Processes Funds from a specific file",
                 "parameters": [
                     {
                         "type": "file",
@@ -62,7 +62,7 @@ var doc = `{
         },
         "/api/funds-body-req": {
             "post": {
-                "description": "Process Funds of customers from body json",
+                "description": "Processes Funds of customers from body json",
                 "consumes": [
                     "application/json"
                 ],
@@ -72,7 +72,7 @@ var doc = `{
                 "tags": [
                     "Records"
                 ],
-                "summary": "Process Funds from body json",
+                "summary": "Processes Funds from body json",
                 "parameters": [
                     {
                         "description": "List of Load Funds of customers",
@@ -96,7 +96,7 @@ var doc = `{
         },
         "/api/funds-write-result-db": {
             "post": {
-                "description": "Process Funds of customers from a specific file and write result on MongoDB",
+                "description": "Processes Funds of customers from a specific file and write result on MongoDB",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -106,7 +106,7 @@ var doc = `{
                 "tags": [
                     "Records"
                 ],
-                "summary": "Process Funds from a specific file and write result on MongoDB",
+                "summary": "Processes Funds from a specific file and write result on MongoDB",
                 "parameters": [
                     {
                         "type": "file",
@@ -128,14 +128,14 @@ var doc = `{
         },
         "/api/funds/download": {
             "get": {
-                "description": "Download the last result of loading the file of Load Funds of customers",
+                "description": "Downloads the last result of loading the file of Load Funds of customers",
                 "produces": [
                     "text/plain"
                 ],
                 "tags": [
                     "Records"
                 ],
-                "summary": "Download last result of load funds file",
+                "summary": "Downloads last result of load funds file",
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -148,14 +148,14 @@ var doc = `{
         },
         "/api/funds/result": {
             "get": {
-                "description": "List the last result of loading the file of Load Funds of customers",
+                "description": "Lists the last result of load funds file that was written on MongoDB",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Records"
                 ],
-                "summary": "List the last result of load funds file",
+                "summary": "Lists the last result of load funds file that was written on MongoDB",
                 "responses": {
                     "200": {
                         "description": "OK",

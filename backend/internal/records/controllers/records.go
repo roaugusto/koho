@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
+	"github.com/roaugusto/kohobalance/config"
 	dto "github.com/roaugusto/kohobalance/internal/records/dtos"
 	rep "github.com/roaugusto/kohobalance/internal/records/repositories"
 	ser "github.com/roaugusto/kohobalance/internal/records/services"
@@ -16,10 +18,20 @@ type RecordHandler struct {
 	Repo rep.IRecordAccount
 }
 
+var (
+	cfg config.Properties
+)
+
+func init() {
+	if err := cleanenv.ReadEnv(&cfg); err != nil {
+		log.Fatalf("Configuration cannot be read: %v ", err)
+	}
+}
+
 // CreateRecordsFromFile godoc
 // @Tags Records
-// @Summary Process Funds from a specific file
-// @Description Process Funds of customers from a specific file
+// @Summary Processes Funds from a specific file
+// @Description Processes Funds of customers from a specific file
 // @Accept  multipart/form-data
 // @Produce  text/plain
 // @Param   file formData file true  "input.txt"
@@ -47,8 +59,8 @@ func (h *RecordHandler) CreateRecordsFromFile(c echo.Context) error {
 
 // CreateRecordsFromFileDb godoc
 // @Tags Records
-// @Summary Process Funds from a specific file and write result on MongoDB
-// @Description Process Funds of customers from a specific file and write result on MongoDB
+// @Summary Processes Funds from a specific file and write result on MongoDB
+// @Description Processes Funds of customers from a specific file and write result on MongoDB
 // @Accept  multipart/form-data
 // @Produce  text/plain
 // @Param   file formData file true  "input.txt"
@@ -76,8 +88,8 @@ func (h *RecordHandler) CreateRecordsFromFileDb(c echo.Context) error {
 
 // CreateRecordsBodyRequest godoc
 // @Tags Records
-// @Summary Process Funds from body json
-// @Description Process Funds of customers from body json
+// @Summary Processes Funds from body json
+// @Description Processes Funds of customers from body json
 // @Accept  json
 // @Param   data      body records.RecordAccountList true  "List of Load Funds of customers"
 // @Produce  text/plain
@@ -106,23 +118,24 @@ func (h *RecordHandler) CreateRecordsBodyRequest(c echo.Context) error {
 
 // GetFile godoc
 // @Tags Records
-// @Summary Download last result of load funds file
-// @Description Download the last result of loading the file of Load Funds of customers
+// @Summary Downloads last result of load funds file
+// @Description Downloads the last result of loading the file of Load Funds of customers
 // @Produce  text/plain
 // @Success 200 {string} string "ok"
 // @Router /api/funds/download [get]
 func (h *RecordHandler) GetFile(c echo.Context) error {
-	return c.Attachment("./assets/files/output.txt", "output.txt")
+	fileN := cfg.AppHome + "/assets/files/output.txt"
+	return c.Attachment(fileN, "output.txt")
 }
 
-// GetRecords godoc
+// GetRecordsFromDB godoc
 // @Tags Records
-// @Summary List the last result of load funds file
-// @Description List the last result of loading the file of Load Funds of customers
+// @Summary Lists the last result of load funds file that was written on MongoDB
+// @Description Lists the last result of load funds file that was written on MongoDB
 // @Produce  json
 // @Success 200 {object} records.RecordProcessedList
 // @Router /api/funds/result [get]
-func (h *RecordHandler) GetRecords(c echo.Context) error {
+func (h *RecordHandler) GetRecordsFromDB(c echo.Context) error {
 	records, err := ser.FindRecords(context.Background(), c.QueryParams(), h.Repo)
 	if err != nil {
 		return err

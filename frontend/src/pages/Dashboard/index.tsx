@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
         if (response.data) {
           const recordsResponse = response.data.map((record: Record) => ({
             ...record,
-            formatted_date: moment(record.time).format('DD/MM/yyyy'),
+            formatted_date: moment.utc(record.time).format('DD/MM/yyyy HH:mm:ss'),
           }));
           setRecords(recordsResponse);
         }
@@ -102,17 +102,17 @@ const Dashboard: React.FC = () => {
                   <TableCell align="right" style={{ width: 70 }}>
                     Customer ID
                   </TableCell>
-                  <TableCell align="right" style={{ width: 70 }}>
+                  <TableCell align="right" style={{ width: 80 }}>
                     Load Amount
                   </TableCell>
-                  <TableCell align="center" style={{ width: 50 }}>
-                    Date
+                  <TableCell align="center" style={{ width: 100 }}>
+                    Date / Time
                   </TableCell>
                   <TableCell align="center" style={{ width: 50 }}>
                     Accepted
                   </TableCell>
                   <TableCell style={{ width: 250 }}>Message</TableCell>
-                  <TableCell style={{ width: 20 }}>
+                  <TableCell style={{ width: 10 }}>
                     <Tooltip title="Dowload last result" placement="top">
                       <ButtonDownload onClick={handleDownload} type="button">
                         <FiDownload />
@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
                         </TableCell>
                         <TableCell align="center">{record.accepted}</TableCell>
                         <TableCell>{record.message}</TableCell>
-                        <TableCell style={{ width: 20 }} />
+                        <TableCell style={{ width: 10 }} />
                       </TableRow>
                     );
                   })}

@@ -63,7 +63,7 @@ func firstDayOfISOWeek(valDate time.Time) time.Time {
 //SaveToFile - Save data to specific file
 func SaveToFile(filename string, data string) error {
 	path := cfg.AppHome
-	fileN := path + "/Assets/files/" + filename
+	fileN := path + "/assets/files/" + filename
 	return ioutil.WriteFile(fileN, []byte(data), 0666)
 }
 

@@ -3,18 +3,20 @@ package records
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"mime/multipart"
+	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	config "github.com/roaugusto/kohobalance/config"
+	dto "github.com/roaugusto/kohobalance/internal/records/dtos"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/labstack/echo/v4"
@@ -24,26 +26,26 @@ import (
 )
 
 var (
-	c   *mongo.Client
-	db  *mongo.Database
-	col *mongo.Collection
-	cfg config.PropertiesTest
-	h   RecordHandler
+	c       *mongo.Client
+	db      *mongo.Database
+	col     *mongo.Collection
+	cfgTest config.PropertiesTest
+	h       RecordHandler
 )
 
 func init() {
-	if err := cleanenv.ReadEnv(&cfg); err != nil {
+	if err := cleanenv.ReadEnv(&cfgTest); err != nil {
 		log.Fatalf("Configuration cannot be read: %v ", err)
 	}
 
-	connectURI := fmt.Sprintf("mongodb://%s:%s", cfg.DBHost, cfg.DBPort)
+	connectURI := fmt.Sprintf("mongodb://%s:%s", cfgTest.DBHost, cfgTest.DBPort)
 	c, err := mongo.Connect(context.Background(), options.Client().ApplyURI(connectURI))
 	if err != nil {
 		log.Fatalf("Enable to connect to database: %v ", err)
 	}
 
-	db = c.Database(cfg.DBName)
-	col = db.Collection(cfg.CollectionName)
+	db = c.Database(cfgTest.DBName)
+	col = db.Collection(cfgTest.CollectionName)
 }
 
 func TestCreateRecordsBodyRequest(t *testing.T) {
@@ -105,14 +107,111 @@ func TestCreateRecordsFromFile(t *testing.T) {
 
 }
 
-func TestConvertDate(t *testing.T) {
-	str := "2014-11-12T11:45:26.371Z"
-	date, err := time.Parse(time.RFC3339, str)
-	if err != nil {
-		t.Error(err)
-	}
+func TestGetFile(t *testing.T) {
+	t.Run("test getting download result data after load", func(t *testing.T) {
 
-	year, week := date.ISOWeek()
-	fmt.Println(year, week)
+		path, err := filepath.Abs("../../../test/input1.txt")
+		if err != nil {
+			t.Error(err)
+		}
+
+		file, err := os.Open(path)
+		if err != nil {
+			t.Error(err)
+		}
+
+		defer file.Close()
+		body := &bytes.Buffer{}
+		writer := multipart.NewWriter(body)
+		part, err := writer.CreateFormFile("file", filepath.Base(path))
+		if err != nil {
+			writer.Close()
+			t.Error(err)
+		}
+		io.Copy(part, file)
+		writer.Close()
+
+		req := httptest.NewRequest("POST", "/upload", body)
+		req.Header.Set("Content-Type", writer.FormDataContentType())
+		res := httptest.NewRecorder()
+
+		e := echo.New()
+		c := e.NewContext(req, res)
+
+		rec := RecordHandler{Repo: col}
+		err = rec.CreateRecordsFromFileDb(c)
+
+		req2 := httptest.NewRequest("GET", "/api/funds/download", nil)
+		res2 := httptest.NewRecorder()
+		req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		e2 := echo.New()
+		c2 := e2.NewContext(req2, res2)
+
+		err = rec.GetFile(c2)
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusOK, res2.Code)
+
+		result := string(res2.Body.Bytes())
+		//err = json.Unmarshal(res2.Body.Bytes(), &records)
+		fmt.Println(result)
+		assert.Equal(t, fmt.Sprintln(`{"id":"15887","customer_id":"528","accepted":true}`), result)
+
+	})
+
+}
+
+func TestGetRecordsFromDB(t *testing.T) {
+	t.Run("test getting records from MongoDB", func(t *testing.T) {
+
+		path, err := filepath.Abs("../../../test/input1.txt")
+		if err != nil {
+			t.Error(err)
+		}
+
+		file, err := os.Open(path)
+		if err != nil {
+			t.Error(err)
+		}
+
+		defer file.Close()
+		body := &bytes.Buffer{}
+		writer := multipart.NewWriter(body)
+		part, err := writer.CreateFormFile("file", filepath.Base(path))
+		if err != nil {
+			writer.Close()
+			t.Error(err)
+		}
+		io.Copy(part, file)
+		writer.Close()
+
+		req := httptest.NewRequest("POST", "/upload", body)
+		req.Header.Set("Content-Type", writer.FormDataContentType())
+		res := httptest.NewRecorder()
+
+		e := echo.New()
+		c := e.NewContext(req, res)
+
+		rec := RecordHandler{Repo: col}
+		err = rec.CreateRecordsFromFileDb(c)
+
+		req2 := httptest.NewRequest("GET", "/api/funds/download", nil)
+		res2 := httptest.NewRecorder()
+		req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		e2 := echo.New()
+		c2 := e2.NewContext(req2, res2)
+
+		err = rec.GetRecordsFromDB(c2)
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusOK, res2.Code)
+
+		var records dto.RecordProcessedList
+
+		err = json.Unmarshal(res2.Body.Bytes(), &records)
+		assert.Nil(t, err)
+		for _, record := range records {
+			assert.Equal(t, "15887", record.ID)
+		}
+
+	})
 
 }

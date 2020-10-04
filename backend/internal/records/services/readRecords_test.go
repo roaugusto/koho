@@ -55,11 +55,11 @@ func TestReadRecords(t *testing.T) {
 		c := e.NewContext(req, res)
 
 		records, err := ReadRecords(c)
-
-		res2, _ := json.Marshal(records)
 		if err != nil {
 			t.Error(err)
 		}
+
+		res2, _ := json.Marshal(records)
 
 		assert.Equal(t, `[{"id":"15887","customer_id":"528","load_amount":"$3318.47","time":"2000-01-01T00:00:00Z"}]`,
 			fmt.Sprint(string(res2)))

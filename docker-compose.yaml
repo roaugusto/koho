@@ -27,6 +27,9 @@ services:
     container_name: web
     build: './frontend'
     stdin_open: true
+    volumes:
+        - './frontend:/app'
+        - '/app/node_modules'
     ports:
         - '3000:3000'
     depends_on:

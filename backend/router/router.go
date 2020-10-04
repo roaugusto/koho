@@ -26,6 +26,6 @@ func Routes(e *echo.Echo, col *mongo.Collection, host string, port string) {
 	e.POST("/api/funds-body-req", records.CreateRecordsBodyRequest)
 
 	e.GET("/api/funds/download", records.GetFile)
-	e.GET("/api/funds/result", records.GetRecords)
+	e.GET("/api/funds/result", records.GetRecordsFromDB)
 
 }
