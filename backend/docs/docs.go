@@ -279,7 +279,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "/",
 	Schemes:     []string{},
 	Title:       "Swagger Koho Load Funds",
-	Description: "API REST to load funds based on a file with load amounts.",
+	Description: "Koho API REST - Validation of load funds of customers, based on a file with load amounts.",
 }
 
 type s struct{}

@@ -52,7 +52,7 @@ info:
   contact:
     email: ro.augusto@gmail.com
     name: Rodrigo Santos
-  description: API REST to load funds based on a file with load amounts.
+  description: Koho API REST - Validation of load funds of customers, based on a file with load amounts.
   license: {}
   title: Swagger Koho Load Funds
   version: "1.0"

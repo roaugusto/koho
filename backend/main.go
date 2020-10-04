@@ -42,7 +42,7 @@ func init() {
 
 // @title Swagger Koho Load Funds
 // @version 1.0
-// @description API REST to load funds based on a file with load amounts.
+// @description Koho API REST - Validation of load funds of customers, based on a file with load amounts.
 
 // @contact.name Rodrigo Santos
 // @contact.email ro.augusto@gmail.com
