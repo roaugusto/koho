@@ -10,6 +10,7 @@ As an information, this was the first time that I developed something in Golang 
 Backend - Golang with Echo Framework. Used swagger for API documentation (https://github.com/swaggo/swag).
 Frontend - React Js with Typescript. Used Eslint and Prettier for code standardization.
 Database - Used MongoDB (nosql).
+
 Dockerfile and Docker Compose
 
 The project can be started in an integrated way, using the docker for execution:
