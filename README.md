@@ -1,4 +1,4 @@
-## Koho Balance - Project developed in Golang and React Js.
+## Koho Balance - A project developed in Golang and React JS.
 
 This is a simple example of implementing a REST API developed in Golang and the frontend developed in React JS with
 typescript, salving some data in MongoDB
