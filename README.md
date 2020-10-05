@@ -7,8 +7,47 @@ As an information, this was the first time that I developed something in Golang 
 
 ### Technologies, languages, frameworks
 
-Backend - Golang with Echo Framework. For API documentation, the swagger was used (https://github.com/swaggo/swag)
+Backend - Golang with Echo Framework. Used swagger for API documentation (https://github.com/swaggo/swag).
+Frontend - React Js with Typescript. Used Eslint and Prettier for code standardization.
+Database - Used MongoDB (nosql).
+Dockerfile and Docker Compose
 
+The project can be started in an integrated way, using the docker for execution:
+
+Backend and Frontend can be run separately, as long as there is a MongoDB server available, or even a docker container with the MongoDB image.
+
+## Execution with Docker
+
+- In the root folder
+```
+docker-compose up
+```
+After the server starts, the api documentation will be available at:
+
+[http://localhost:3333/swagger/index.html](http://localhost:3333/swagger/index.html)
+
+## Separate execution:
+
+### Backend execution
+- In the backend folder
+
+```
+go run main.go
+```
+
+To perform the tests, run:
+```
+go test ./...
+```
+
+### Frontend execution
+- Na pasta frontend
+```
+yarn start
+```
+After the start, access the system at:
+
+[http://localhost:3000](http://localhost:3000)
 
 
 ## About the challenge

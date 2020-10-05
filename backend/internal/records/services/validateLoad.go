@@ -230,7 +230,7 @@ func formatReturnData(uuid string, record dto.RecordAccount, codErr string, acce
 	case "40":
 		message = "The record reached a maximum load of $20,000 per week."
 	default:
-		message = "Processing error."
+		message = "Processing error or wrong input layout."
 	}
 
 	res := &dto.RecordsResponse{
