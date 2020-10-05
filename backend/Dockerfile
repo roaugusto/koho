@@ -10,6 +10,8 @@ ENV APP_HOME /app
 
 WORKDIR /app
 
+RUN mkdir -p /app/assets/files
+
 COPY . /app
 
 RUN go mod download

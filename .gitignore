@@ -27,3 +27,4 @@
 /backend/node_modules
 /backend/coverage
 /backend/assets/files/*
+!/backend/assets/files/.gitkeep
