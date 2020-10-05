@@ -35,7 +35,7 @@ var doc = `{
                     "multipart/form-data"
                 ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Records"
@@ -52,9 +52,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/records.LoadFundsResponse"
                         }
                     }
                 }
@@ -67,7 +67,7 @@ var doc = `{
                     "application/json"
                 ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Records"
@@ -86,9 +86,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/records.LoadFundsResponse"
                         }
                     }
                 }
@@ -101,7 +101,7 @@ var doc = `{
                     "multipart/form-data"
                 ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Records"
@@ -118,9 +118,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/records.LoadFundsResponse"
                         }
                     }
                 }
@@ -136,11 +136,20 @@ var doc = `{
                     "Records"
                 ],
                 "summary": "Downloads last result of load funds file",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Process ID",
+                        "name": "uuid_file",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "A txt file",
                         "schema": {
-                            "type": "string"
+                            "type": "file"
                         }
                     }
                 }
@@ -157,6 +166,13 @@ var doc = `{
                 ],
                 "summary": "Lists the last result of load funds file that was written on MongoDB",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Process ID",
+                        "name": "process_id",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Transaction ID",
@@ -194,6 +210,15 @@ var doc = `{
         }
     },
     "definitions": {
+        "records.LoadFundsResponse": {
+            "type": "object",
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "example": "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43"
+                }
+            }
+        },
         "records.RecordAccount": {
             "type": "object",
             "properties": {
@@ -247,6 +272,10 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "Message error!"
+                },
+                "process_id": {
+                    "type": "string",
+                    "example": "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43"
                 },
                 "time": {
                     "type": "string",

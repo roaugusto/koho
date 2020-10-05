@@ -48,15 +48,20 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadRecords(): Promise<void> {
-      api.get('/api/funds/result').then(response => {
-        if (response.data) {
-          const recordsResponse = response.data.map((record: Record) => ({
-            ...record,
-            formatted_date: moment.utc(record.time).format('DD/MM/yyyy HH:mm:ss'),
-          }));
-          setRecords(recordsResponse);
-        }
-      });
+
+      const lastUUIDFile = localStorage.getItem('@Koho:LastUUIDFile');
+
+      if (lastUUIDFile) {
+        api.get(`/api/funds/result?process_id=${lastUUIDFile}`).then(response => {
+          if (response.data) {
+            const recordsResponse = response.data.map((record: Record) => ({
+              ...record,
+              formatted_date: moment.utc(record.time).format('DD/MM/yyyy HH:mm:ss'),
+            }));
+            setRecords(recordsResponse);
+          }
+        });
+      }
     }
 
     loadRecords();
@@ -72,11 +77,12 @@ const Dashboard: React.FC = () => {
   };
 
   const handleDownload = (): void => {
+    const lastUUIDFile = localStorage.getItem('@Koho:LastUUIDFile');
     const config = {
       headers: { 'Cache-Control': 'no-cache' },
     };
 
-    api.get('/api/funds/download', config).then(response => {
+    api.get(`/api/funds/download?uuid_file=${lastUUIDFile}`, config).then(response => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;

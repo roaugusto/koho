@@ -14,6 +14,7 @@ type RecordProcessedList []RecordProcessed
 //30 - The record reached a maximum load of $5,000 per day.
 //40 - The record reached a maximum load of $20,000 per week.
 type RecordProcessed struct {
+	ProcessID  string    `json:"process_id" bson:"process_id" example:"c01d7cf6-ec3f-47f0-9556-a5d6e9009a43"`
 	ID         string    `json:"id" bson:"id" example:"1234"`
 	CustomerID string    `json:"customer_id" bson:"customer_id" example:"1234"`
 	LoadAmount string    `json:"load_amount" bson:"load_amount" example:"$3456.78"`

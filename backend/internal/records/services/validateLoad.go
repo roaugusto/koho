@@ -25,7 +25,7 @@ var (
 )
 
 //ValidateLoadRecord - Responsible to validate the business rules of the record
-func ValidateLoadRecord(record dto.RecordAccount) (*dto.RecordsResponse, *dto.RecordProcessed, bool, error) {
+func ValidateLoadRecord(record dto.RecordAccount, uuid string) (*dto.RecordsResponse, *dto.RecordProcessed, bool, error) {
 
 	var cID = record.CustomerID
 	var currentBalance = m[cID]
@@ -36,7 +36,7 @@ func ValidateLoadRecord(record dto.RecordAccount) (*dto.RecordsResponse, *dto.Re
 
 		ret := existingCustomerLoadBalance(record)
 		if ret != "00" {
-			data, dataDb := formatReturnData(record, ret, false)
+			data, dataDb := formatReturnData(uuid, record, ret, false)
 			return data, dataDb, false, nil
 		}
 
@@ -46,14 +46,14 @@ func ValidateLoadRecord(record dto.RecordAccount) (*dto.RecordsResponse, *dto.Re
 		// Create a reference for this new customer
 		ret := newCustomerLoadBalance(record)
 		if ret != "00" {
-			data, dataDb := formatReturnData(record, ret, false)
+			data, dataDb := formatReturnData(uuid, record, ret, false)
 			return data, dataDb, false, nil
 		}
 
 	}
 
 	// Record was validate with success!
-	data, dataDb := formatReturnData(record, "00", true)
+	data, dataDb := formatReturnData(uuid, record, "00", true)
 	return data, dataDb, true, nil
 }
 
@@ -207,7 +207,7 @@ func validationDayLoad(lastDate time.Time, dateRecord time.Time, dayBalance floa
 }
 
 //formatReturnData - Responsible to format the return date of the function validateLoadRecord
-func formatReturnData(record dto.RecordAccount, codErr string, accepted bool) (*dto.RecordsResponse, *dto.RecordProcessed) {
+func formatReturnData(uuid string, record dto.RecordAccount, codErr string, accepted bool) (*dto.RecordsResponse, *dto.RecordProcessed) {
 
 	var message string
 	var ac string
@@ -240,6 +240,7 @@ func formatReturnData(record dto.RecordAccount, codErr string, accepted bool) (*
 	}
 
 	res2 := &dto.RecordProcessed{
+		ProcessID:  uuid,
 		ID:         record.ID,
 		CustomerID: record.CustomerID,
 		LoadAmount: record.LoadAmount,

@@ -16,8 +16,12 @@ import (
 func FindRecords(ctx context.Context, q url.Values, repo rep.IRecordAccount) ([]dto.RecordProcessed, error) {
 	var records []dto.RecordProcessed
 
-	filter := make(map[string]interface{})
+	uuid := q.Get("process_id")
+	if uuid == "" {
+		return records, echo.NewHTTPError(http.StatusBadRequest, "process_id needs to be informed")
+	}
 
+	filter := make(map[string]interface{})
 	for k, v := range q {
 		filter[k] = v[0]
 	}

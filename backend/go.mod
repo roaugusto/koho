@@ -9,6 +9,7 @@ require (
 	github.com/go-openapi/spec v0.19.9 // indirect
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0
 	github.com/ilyakaznacheev/cleanenv v1.2.5
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0

@@ -141,7 +141,12 @@ func TestGetFile(t *testing.T) {
 		rec := RecordHandler{Repo: col}
 		err = rec.CreateRecordsFromFileDb(c)
 
-		req2 := httptest.NewRequest("GET", "/api/funds/download", nil)
+		var resLoad dto.LoadFundsResponse
+		err = json.Unmarshal(res.Body.Bytes(), &resLoad)
+		assert.Nil(t, err)
+
+		fmt.Println(resLoad)
+		req2 := httptest.NewRequest("GET", fmt.Sprintf("/api/funds/download?uuid_file=%s", resLoad.ProcessID), nil)
 		res2 := httptest.NewRecorder()
 		req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		e2 := echo.New()
@@ -194,7 +199,12 @@ func TestGetRecordsFromDB(t *testing.T) {
 		rec := RecordHandler{Repo: col}
 		err = rec.CreateRecordsFromFileDb(c)
 
-		req2 := httptest.NewRequest("GET", "/api/funds/download", nil)
+		var resLoad dto.LoadFundsResponse
+		err = json.Unmarshal(res.Body.Bytes(), &resLoad)
+		assert.Nil(t, err)
+
+		req2 := httptest.NewRequest("GET", fmt.Sprintf("/api/funds/result?process_id=%s", resLoad.ProcessID), nil)
+
 		res2 := httptest.NewRecorder()
 		req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		e2 := echo.New()

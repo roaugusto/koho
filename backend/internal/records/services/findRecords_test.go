@@ -39,12 +39,13 @@ func TestFindRecords(t *testing.T) {
 
 		rec := RecordHandler{Repo: col}
 
-		_, errLoad := LoadFunds(context.Background(), records, rec.Repo, true)
+		resLoad, errLoad := LoadFunds(context.Background(), records, rec.Repo, true)
 		if errLoad != nil {
 			log.Fatalf("Error on LoadFunds: %v ", errLoad)
 		}
 
-		var q url.Values
+		q := url.Values{}
+		q.Set("process_id", resLoad.ProcessID)
 
 		res, errFind := FindRecords(context.Background(), q, rec.Repo)
 		if errFind != nil {
@@ -53,8 +54,9 @@ func TestFindRecords(t *testing.T) {
 
 		res2, _ := json.Marshal(res)
 
-		assert.Equal(t, `[{"id":"15887","customer_id":"528","load_amount":"$3318.47","time":"2000-01-01T00:00:00Z","accepted":"true","cod_error":"00","message":""}]`,
-			fmt.Sprint(string(res2)))
+		result := fmt.Sprintf(`[{"process_id":"%s","id":"15887","customer_id":"528","load_amount":"$3318.47","time":"2000-01-01T00:00:00Z","accepted":"true","cod_error":"00","message":""}]`, resLoad.ProcessID)
+
+		assert.Equal(t, result, fmt.Sprint(string(res2)))
 
 	})
 }

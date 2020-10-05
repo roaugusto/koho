@@ -19,6 +19,10 @@ interface FileProps {
   readableSize: string;
 }
 
+export interface IUpload {
+  process_id: string;
+}
+
 const Import: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<FileProps[]>([]);
@@ -32,7 +36,9 @@ const Import: React.FC = () => {
         setShowPopup(true);
         const data = new FormData();
         data.append('file', item.file, item.name);
-        await api.post('/api/funds-write-result-db', data);
+        const res = await api.post<IUpload>('/api/funds-write-result-db', data);
+        const uuid = res.data.process_id
+        localStorage.setItem('@Koho:LastUUIDFile', uuid);
         setShowPopup(false);
       } catch (err) {
         console.log(err);

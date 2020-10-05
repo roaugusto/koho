@@ -2,6 +2,7 @@ package records
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -33,9 +34,10 @@ func init() {
 // @Summary Processes Funds from a specific file
 // @Description Processes Funds of customers from a specific file
 // @Accept  multipart/form-data
-// @Produce  text/plain
+// @Produce  json
 // @Param   file formData file true  "input.txt"
 // @Success 200 {string} string "ok"
+// @Success 200 {object} records.LoadFundsResponse
 // @Router /api/funds [post]
 func (h *RecordHandler) CreateRecordsFromFile(c echo.Context) error {
 
@@ -53,7 +55,7 @@ func (h *RecordHandler) CreateRecordsFromFile(c echo.Context) error {
 	if errLoad != nil {
 		return errLoad
 	}
-	return c.String(http.StatusCreated, res)
+	return c.JSON(http.StatusCreated, res)
 
 }
 
@@ -62,9 +64,9 @@ func (h *RecordHandler) CreateRecordsFromFile(c echo.Context) error {
 // @Summary Processes Funds from a specific file and write result on MongoDB
 // @Description Processes Funds of customers from a specific file and write result on MongoDB
 // @Accept  multipart/form-data
-// @Produce  text/plain
+// @Produce  json
 // @Param   file formData file true  "input.txt"
-// @Success 200 {string} string "ok"
+// @Success 200 {object} records.LoadFundsResponse
 // @Router /api/funds-write-result-db [post]
 func (h *RecordHandler) CreateRecordsFromFileDb(c echo.Context) error {
 
@@ -82,7 +84,7 @@ func (h *RecordHandler) CreateRecordsFromFileDb(c echo.Context) error {
 	if errLoad != nil {
 		return errLoad
 	}
-	return c.String(http.StatusCreated, res)
+	return c.JSON(http.StatusCreated, res)
 
 }
 
@@ -92,8 +94,8 @@ func (h *RecordHandler) CreateRecordsFromFileDb(c echo.Context) error {
 // @Description Processes Funds of customers from body json
 // @Accept  json
 // @Param   data      body records.RecordAccountList true  "List of Load Funds of customers"
-// @Produce  text/plain
-// @Success 200 {string} string "ok"
+// @Produce json
+// @Success 200 {object} records.LoadFundsResponse
 // @Router /api/funds-body-req [post]
 func (h *RecordHandler) CreateRecordsBodyRequest(c echo.Context) error {
 	var records []dto.RecordAccount
@@ -113,7 +115,7 @@ func (h *RecordHandler) CreateRecordsBodyRequest(c echo.Context) error {
 		return err
 	}
 
-	return c.String(http.StatusCreated, res)
+	return c.JSON(http.StatusCreated, res)
 }
 
 // GetFile godoc
@@ -121,10 +123,16 @@ func (h *RecordHandler) CreateRecordsBodyRequest(c echo.Context) error {
 // @Summary Downloads last result of load funds file
 // @Description Downloads the last result of loading the file of Load Funds of customers
 // @Produce  text/plain
-// @Success 200 {string} string "ok"
+// @Param   uuid_file		query  string  true   "Process ID"
+// @Success 200 {file} file "A txt file"
 // @Router /api/funds/download [get]
 func (h *RecordHandler) GetFile(c echo.Context) error {
-	fileN := cfg.AppHome + "/assets/files/output.txt"
+	fileName := c.QueryParam("uuid_file")
+	if fileName == "" {
+		return c.JSON(http.StatusBadRequest, "uuid_file needs to be informed")
+	}
+
+	fileN := fmt.Sprintf("%s/assets/files/%v.txt", cfg.AppHome, fileName)
 	return c.Attachment(fileN, "output.txt")
 }
 
@@ -133,6 +141,7 @@ func (h *RecordHandler) GetFile(c echo.Context) error {
 // @Summary Lists the last result of load funds file that was written on MongoDB
 // @Description Lists the last result of load funds file that was written on MongoDB
 // @Produce  json
+// @Param   process_id		query  string  true   "Process ID"
 // @Param   id     				query  string  false   "Transaction ID"
 // @Param   customer_id   query  string  false   "Customer ID"
 // @Param   accepted      query  string  false   "Accepted"
@@ -140,6 +149,11 @@ func (h *RecordHandler) GetFile(c echo.Context) error {
 // @Success 200 {object} records.RecordProcessedList
 // @Router /api/funds/result [get]
 func (h *RecordHandler) GetRecordsFromDB(c echo.Context) error {
+	fileName := c.QueryParam("process_id")
+	if fileName == "" {
+		return c.JSON(http.StatusBadRequest, "process_id needs to be informed")
+	}
+
 	records, err := ser.FindRecords(context.Background(), c.QueryParams(), h.Repo)
 	if err != nil {
 		return err
