@@ -42,7 +42,7 @@ go test ./...
 ```
 
 ### Frontend execution
-- Na pasta frontend
+- In the frontend folder
 ```
 yarn start
 ```
