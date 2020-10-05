@@ -55,6 +55,8 @@ After the start, access the system at:
 ![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho1.png?raw=true)
 ![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho2.png?raw=true)
 
+![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho_m1.png?raw=true) ![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho_m2.png?raw=true) ![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho_m3.png?raw=true)
+
 ## About the challenge
 
 The test consist of the following rules:
