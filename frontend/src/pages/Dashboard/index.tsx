@@ -18,6 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { Container, ButtonDownload } from './styles';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
+import { useToast } from '../../hooks/toast';
 
 interface Record {
   id: string;
@@ -31,6 +32,7 @@ interface Record {
 }
 
 const Dashboard: React.FC = () => {
+  const { addToast } = useToast();
   const [records, setRecords] = useState<Record[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -48,19 +50,22 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadRecords(): Promise<void> {
-
       const lastUUIDFile = localStorage.getItem('@Koho:LastUUIDFile');
 
       if (lastUUIDFile) {
-        api.get(`/api/funds/result?process_id=${lastUUIDFile}`).then(response => {
-          if (response.data) {
-            const recordsResponse = response.data.map((record: Record) => ({
-              ...record,
-              formatted_date: moment.utc(record.time).format('DD/MM/yyyy HH:mm:ss'),
-            }));
-            setRecords(recordsResponse);
-          }
-        });
+        api
+          .get(`/api/funds/result?process_id=${lastUUIDFile}`)
+          .then(response => {
+            if (response.data) {
+              const recordsResponse = response.data.map((record: Record) => ({
+                ...record,
+                formatted_date: moment
+                  .utc(record.time)
+                  .format('DD/MM/yyyy HH:mm:ss'),
+              }));
+              setRecords(recordsResponse);
+            }
+          });
       }
     }
 
@@ -76,21 +81,31 @@ const Dashboard: React.FC = () => {
     setPage(0);
   };
 
-  const handleDownload = (): void => {
+  const handleDownload = async (): Promise<void> => {
     const lastUUIDFile = localStorage.getItem('@Koho:LastUUIDFile');
     const config = {
       headers: { 'Cache-Control': 'no-cache' },
     };
 
-    api.get(`/api/funds/download?uuid_file=${lastUUIDFile}`, config).then(response => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+    try {
+      const res = await api.get(
+        `/api/funds/download?uuid_file=${lastUUIDFile}`,
+        config,
+      );
+      const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'output.txt'); // or any other extension
       document.body.appendChild(link);
       link.click();
       link.remove();
-    });
+    } catch (err) {
+      addToast({
+        type: 'error',
+        title: 'Download error',
+        description: 'Output file not found. Please import a new file again!',
+      });
+    }
   };
 
   return (
