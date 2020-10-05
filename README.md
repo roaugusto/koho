@@ -27,6 +27,8 @@ After the server starts, the api documentation will be available at:
 
 [http://localhost:3333/swagger/index.html](http://localhost:3333/swagger/index.html)
 
+![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/swagger.png?raw=true)
+
 ## Separate execution:
 
 ### Backend execution
@@ -50,6 +52,8 @@ After the start, access the system at:
 
 [http://localhost:3000](http://localhost:3000)
 
+![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho1.png?raw=true)
+![alt text](https://github.com/roaugusto/koho/blob/main/assets/imgs/koho2.png?raw=true)
 
 ## About the challenge
 
