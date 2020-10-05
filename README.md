@@ -1,7 +1,7 @@
 ## Koho Balance - A project developed in Golang and React JS.
 
 This is a simple example of implementing a REST API developed in Golang and the frontend developed in React JS with
-typescript, salving some data in MongoDB
+typescript, saving some data in MongoDB
 
 As an information, this was the first time that I developed something in Golang and probably the structure used does not follow the best practices. However, I believe it can be a good source of research. Feel free to contribute in any way.
 
