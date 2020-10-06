@@ -38,6 +38,18 @@ After the server starts, the api documentation will be available at:
 go run main.go
 ```
 
+PS: Necessary configure the env variables:
+| Variable    | description                               | 
+|-------------|-------------------------------------------|
+| APP_HOME    | Path where the application is located.    |
+| HOST        | Location where the application is hosted. |
+| MY_APP_PORT | Port where the application will run.      |
+| DB_HOST     | Location where the database is hosted.    |
+| DB_PORT     | Port where the database is located.       |
+| DB_NAME     | Name of the database.  |
+| COLLECTION_NAME | Collection name. |
+
+
 To perform the tests, run:
 ```
 go test ./...
@@ -48,6 +60,13 @@ go test ./...
 ```
 yarn start
 ```
+
+PS: Necessary configure the env variables:
+| Variable    | description                               | 
+|-------------|-------------------------------------------|
+| REACT_APP_BASE_URL | URL where the API in the backend is located. |
+
+
 After the start, access the system at:
 
 [http://localhost:3000](http://localhost:3000)
